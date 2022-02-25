@@ -102,6 +102,11 @@ and use Python's built-in web server for a preview in your web browser
 
     python3 -m http.server --directory 'docs/_build/html'
 
+If you have problem previewing rst files in VSCode with
+`reStructuredText <https://marketplace.visualstudio.com/items?itemName=lextudio.restructuredtext>`_
+plugin, run the following command in bash in project root::
+
+    ls *.rst | xargs -I% bash -c 'n="%"; b="${n::-4}"; ln -s html/${b,,}.html docs/_build/$b.html'
 
 Code Contributions
 ==================
