@@ -7,7 +7,7 @@
 
 # Xepor
 
-[Xepor](https://github.com/xepor/xepor), a web routing framework for reverse engineers and security researchers.
+[Xepor](https://github.com/xepor/xepor) (pronounced */ˈzɛfə/*, zephyr), a web routing framework for reverse engineers and security researchers.
 
 ## Features
 
