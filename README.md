@@ -8,6 +8,11 @@
 # Xepor
 
 [Xepor](https://github.com/xepor/xepor) (pronounced */ˈzɛfə/*, zephyr), a web routing framework for reverse engineers and security researchers.
+It provides a Flask-like API for hackers to intercept and modify HTTP request and/or HTTP response in a human-friendly coding style.
+
+This project is meant to be used with [mitmproxy](https://github.com/mitmproxy/mitmproxy/). User write scripts with `xepor`, and run the script *inside* mitmproxy with `mitmproxy -s your-script.py`.
+
+If you want to step from PoC to production, from demo(e.g. [http-reply-from-proxy.py](https://github.com/mitmproxy/mitmproxy/blob/v7.0.4/examples/addons/http-reply-from-proxy.py), [http-trailers.py](https://github.com/mitmproxy/mitmproxy/blob/v7.0.4/examples/addons/http-trailers.py), [http-stream-modify.py](https://github.com/mitmproxy/mitmproxy/blob/v7.0.4/examples/addons/http-stream-modify.py)) to something you could take out with your WiFi Pineapple, then Xepor is for you!
 
 ## Features
 
