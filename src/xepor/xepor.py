@@ -10,7 +10,7 @@ import traceback
 import urllib.parse
 from typing import List, Optional, Tuple, Union
 from parse import Parser
-from mitmproxy.http import HTTPFlow, HTTPResponse
+from mitmproxy.http import HTTPFlow, Response
 
 import functools
 import logging
@@ -145,10 +145,10 @@ class InterceptedAPI:
             return flow.request.pretty_host
 
     def default_response(self):
-        return HTTPResponse.make(404, "Not Found")
+        return Response.make(404, "Not Found")
 
     def error_response(self, msg="APIServer Error"):
-        return HTTPResponse.make(502, msg)
+        return Response.make(502, msg)
 
     def find_handler(self, host, path, reqtype=REQUEST):
         if reqtype == InterceptedAPI.REQUEST:
