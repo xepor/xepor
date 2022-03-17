@@ -1,3 +1,3 @@
 # Contributors
 
-* ttimasdf <opensource@rabit.pw>
+* ttimasdf <https://github.com/ttimasdf>
