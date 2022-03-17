@@ -145,7 +145,7 @@ class InterceptedAPI:
             return flow.request.pretty_host
 
     def default_response(self):
-        return Response.make(404, "Not Found")
+        return Response.make(404, "Not Found", {"X-Intercepted-By": "mitmproxy"})
 
     def error_response(self, msg="APIServer Error"):
         return Response.make(502, msg)
