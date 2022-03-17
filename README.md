@@ -12,13 +12,12 @@
 ## Features
 
 1. Code everything with `@api.route()`, just like Flask! Write everything in *one* script and no `if..else` any more.
-1. Handle multiple URL routes, even multiple hosts in one `InterceptedAPI` instance.
-1. For each route, you can choose to modify the request *before* connecting to server (or even return a fake response without connection to upstream), or modify the response *before* forwarding to user.
-1. Blacklist mode or whitelist mode. Only allow URL endpoints defined in scripts to connect to upstream, blocking everything else (in specific domain) with HTTP 404. Suitable for transparent proxying.
+2. Handle multiple URL routes, even multiple hosts in one `InterceptedAPI` instance.
+3. For each route, you can choose to modify the request *before* connecting to server (or even return a fake response without connection to upstream), or modify the response *before* forwarding to user.
+4. Blacklist mode or whitelist mode. Only allow URL endpoints defined in scripts to connect to upstream, blocking everything else (in specific domain) with HTTP 404. Suitable for transparent proxying.
 5. Human readable URL path definition and matching powered by [parse](https://pypi.org/project/parse/)
-   1. Host remapping. define rules to redirect to genuine upstream from your fake hosts. Regex matching is supported. **Best for SSL stripping and server side license cracking**!
-
-6. Plus all the bests from [mitmproxy](https://github.com/mitmproxy/mitmproxy/)! **ALL** operation modes ( `mitmproxy` / `mitmweb` + `regular` / `transparent`  / `socks5` / `reverse:SPEC` / `upstream:SPEC`) are fully supported.
+6. Host remapping. define rules to redirect to genuine upstream from your fake hosts. Regex matching is supported. **Best for SSL stripping and server side license cracking**!
+7. Plus all the bests from [mitmproxy](https://github.com/mitmproxy/mitmproxy/)! **ALL** operation modes ( `mitmproxy` / `mitmweb` + `regular` / `transparent`  / `socks5` / `reverse:SPEC` / `upstream:SPEC`) are fully supported.
 
 ## Use Case
 
