@@ -1,5 +1,5 @@
 import pytest
-from mitmproxy.http import HTTPFlow, HTTPResponse
+from mitmproxy.http import HTTPFlow, Response
 from mitmproxy.test import taddons, tflow
 from xepor import InterceptedAPI
 
@@ -15,7 +15,7 @@ def api_simple():
 
     @api.route("/test")
     def route1(flow: HTTPFlow):
-        flow.response = HTTPResponse.make(200, "TEST intercepted")
+        flow.response = Response.make(200, "TEST intercepted")
 
     return api
 
