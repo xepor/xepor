@@ -29,7 +29,8 @@ If you want to step from PoC to production, from demo(e.g. [http-reply-from-prox
 1. Evil AP and phishing through MITM.
 2. Sniffing traffic from specific device by iptables + transparent proxy, modify the payload with xepor on the fly.
 3. Cracking cloud based software license. See [examples/krisp/](https://github.com/xepor/xepor-examples/tree/main/krisp/) as an example.
-4. ... and many more.
+4. Write complicated web crawler in **\~100 lines of codes**. See [examples/polyv_scrapper/](https://github.com/xepor/xepor-examples/tree/main/polyv_scrapper/) as an example.
+5. ... and many more.
 
 SSL stripping is NOT provided by this project.
 
