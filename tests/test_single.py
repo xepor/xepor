@@ -17,18 +17,31 @@ def api_simple():
     def route1(flow: HTTPFlow):
         flow.response = Response.make(200, "TEST intercepted")
 
+    @api.route(
+        "/{}/{}/{vid}_1.m3u8",
+        "hls.videocc.net",
+    )
+    def route2(flow: HTTPFlow, *args, vid):
+        flow.response = Response.make(200, "TEST 2 INTERCEPTED")
+
     return api
 
 
-def test_intercepted_route(api_simple):
+@pytest.mark.parametrize(
+    "req_url,resp_body",
+    [
+        ("http://example.com/test", "TEST intercepted"),
+        ("http://hls.videocc.net/jkag324wd2/e/cwqzcxkvj0iukomqxu0l591u2dke4vkc_1.m3u8", "TEST 2 INTERCEPTED"),
+    ],
+)
+def test_intercepted_route(api_simple, req_url, resp_body):
     with taddons.context(api_simple) as tctx:
         flow = tflow.tflow()
-        flow.request.host = "example.com"
-        flow.request.path = "/test"
+        flow.request.url = req_url
         assert flow.response is None
 
         api_simple.request(flow)
-        assert "TEST intercepted" in flow.response.text
+        assert resp_body in flow.response.text
 
 
 def test_non_intercepted_route(api_simple):
