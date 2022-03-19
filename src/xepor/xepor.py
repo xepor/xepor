@@ -111,7 +111,7 @@ class InterceptedAPI:
             flow.metadata[InterceptedAPI.META_RESP_PASSTHROUGH] = True
             self._log.debug("=> [%s] %s passthrough", flow.response.status_code, path)
 
-    def route(self, path, host=None, reqtype=REQUEST, catch_error=True):
+    def route(self, path, host=None, reqtype=REQUEST, catch_error=True, return_error=False):
         host = host or self.default_host
 
         # generic catch-all wrapper
@@ -123,9 +123,13 @@ class InterceptedAPI:
                 except Exception as e:
                     etype, value, tback = sys.exc_info()
                     tb = "".join(traceback.format_exception(etype, value, tback))
-                    self._log.error("Exception catched %s: %s", e.__class__.__name__, str(e))
-                    self._log.error("Traceback:\n%s", tb)
-                    flow.response = self.error_response(str(e))
+                    self._log.error(
+                        "Exception catched when handling response to %s:\n%s",
+                        flow.request.pretty_url,
+                        tb,
+                    )
+                    if return_error:
+                        flow.response = self.error_response(str(e))
 
             return handler
 
