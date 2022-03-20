@@ -42,13 +42,15 @@ class InterceptedAPI:
         "X-Real-Ip",
     ]
 
-    def __init__(self,
-            default_host: Optional[str]=None,
-            host_mapping: List[Tuple[Union[str, re.Pattern], str]]={},
-            blacklist_domain:List[str]=[],
-            request_passthrough: bool=True,
-            response_passthrough: bool=True,
-            respect_proxy_headers: bool=False):
+    def __init__(
+        self,
+        default_host: Optional[str] = None,
+        host_mapping: List[Tuple[Union[str, re.Pattern], str]] = {},
+        blacklist_domain: List[str] = [],
+        request_passthrough: bool = True,
+        response_passthrough: bool = True,
+        respect_proxy_headers: bool = False,
+    ):
 
         self.default_host = default_host
         self.host_mapping = host_mapping
@@ -76,14 +78,21 @@ class InterceptedAPI:
             flow.metadata[InterceptedAPI.META_REQ_URLPARSE] = url
         path = url.path
         if flow.metadata.get(InterceptedAPI.META_REQ_PASSTHROUGH) is True:
-            self._log.warning("<= [%s] %s skipped because of previous passthrough", flow.request.method, path)
+            self._log.warning(
+                "<= [%s] %s skipped because of previous passthrough",
+                flow.request.method,
+                path,
+            )
             return
         host = self.remap_host(flow)
         handler, params = self.find_handler(host, path, InterceptedAPI.REQUEST)
         if handler is not None:
             self._log.info("<= [%s] %s", flow.request.method, path)
             handler(flow, *params.fixed, **params.named)
-        elif not self.request_passthrough or self.get_host(flow)[0] in self.blacklist_domain:
+        elif (
+            not self.request_passthrough
+            or self.get_host(flow)[0] in self.blacklist_domain
+        ):
             self._log.warning("<= [%s] %s default response", flow.request.method, path)
             flow.response = self.default_response()
         else:
@@ -98,20 +107,33 @@ class InterceptedAPI:
             flow.metadata[InterceptedAPI.META_REQ_URLPARSE] = url
         path = url.path
         if flow.metadata.get(InterceptedAPI.META_RESP_PASSTHROUGH) is True:
-            self._log.warning("=> [%s] %s skipped because of previous passthrough", flow.response.status_code, path)
+            self._log.warning(
+                "=> [%s] %s skipped because of previous passthrough",
+                flow.response.status_code,
+                path,
+            )
             return
-        handler, params = self.find_handler(self.get_host(flow)[0], path, InterceptedAPI.RESPONSE)
+        handler, params = self.find_handler(
+            self.get_host(flow)[0], path, InterceptedAPI.RESPONSE
+        )
         if handler is not None:
             self._log.info("=> [%s] %s", flow.response.status_code, path)
             handler(flow, *params.fixed, **params.named)
-        elif not self.response_passthrough or self.get_host(flow)[0] in self.blacklist_domain:
-            self._log.warning("=> [%s] %s default response", flow.response.status_code, path)
+        elif (
+            not self.response_passthrough
+            or self.get_host(flow)[0] in self.blacklist_domain
+        ):
+            self._log.warning(
+                "=> [%s] %s default response", flow.response.status_code, path
+            )
             flow.response = self.default_response()
         else:
             flow.metadata[InterceptedAPI.META_RESP_PASSTHROUGH] = True
             self._log.debug("=> [%s] %s passthrough", flow.response.status_code, path)
 
-    def route(self, path, host=None, reqtype=REQUEST, catch_error=True, return_error=False):
+    def route(
+        self, path, host=None, reqtype=REQUEST, catch_error=True, return_error=False
+    ):
         host = host or self.default_host
 
         # generic catch-all wrapper
@@ -149,15 +171,24 @@ class InterceptedAPI:
     def remap_host(self, flow: HTTPFlow, overwrite=True):
         host, port = self.get_host(flow)
         for src, dest in self.host_mapping:
-            if (isinstance(src, re.Pattern) and src.match(host)) or \
-                (isinstance(src, str) and host == src):
-                if overwrite and (flow.request.host != dest or flow.request.port != port):
+            if (isinstance(src, re.Pattern) and src.match(host)) or (
+                isinstance(src, str) and host == src
+            ):
+                if overwrite and (
+                    flow.request.host != dest or flow.request.port != port
+                ):
                     if self.respect_proxy_headers:
                         flow.request.scheme = flow.request.headers["X-Forwarded-Proto"]
                     flow.server_conn = Server((dest, port))
                     flow.request.host = dest
                     flow.request.port = port
-                self._log.debug("flow: %s, remapping host: %s -> %s, port: %d", flow, host, dest, port)
+                self._log.debug(
+                    "flow: %s, remapping host: %s -> %s, port: %d",
+                    flow,
+                    host,
+                    dest,
+                    port,
+                )
                 return dest
         return host
 
