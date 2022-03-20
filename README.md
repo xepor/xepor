@@ -76,7 +76,7 @@ def change_your_request(flow: HTTPFlow):
     flow.request.query["payload"] = "evil_param"
 
 
-@api.route("/basic-auth/{usr}/{pwd}", reqtype=RouteType.RESPONSE)
+@api.route("/basic-auth/{usr}/{pwd}", rtype=RouteType.RESPONSE)
 def capture_auth(flow: HTTPFlow, usr=None, pwd=None):
     """
     Sniffing password.
