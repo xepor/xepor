@@ -15,4 +15,6 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
-from .xepor import InterceptedAPI
+from .xepor import InterceptedAPI, RouteType, FlowMeta
+
+__all__ = ["InterceptedAPI", "RouteType", "FlowMeta"]
