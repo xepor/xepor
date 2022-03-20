@@ -3,14 +3,13 @@ import pytest
 from mitmproxy.http import Response
 from mitmproxy.test import taddons, tflow
 
-from .tserver import MasterTest
 
 __author__ = "ttimasdf"
 __copyright__ = "ttimasdf"
 __license__ = "Apache-2.0"
 
 
-class TestScripts(MasterTest):
+class TestScripts:
     def test_httpbin(self, tdata):
         with taddons.context() as tctx:
             s = tctx.script(tdata.path("../examples/httpbin/httpbin.py"))
