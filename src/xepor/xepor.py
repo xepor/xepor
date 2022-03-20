@@ -4,19 +4,20 @@ ease your life from if-else.
 
 """
 
+import functools
+import logging
 import os
+import re
 import sys
 import traceback
 import urllib.parse
+from enum import Enum
 from typing import List, Optional, Tuple, Union
-from parse import Parser
+
 from mitmproxy.connection import Server
 from mitmproxy.http import HTTPFlow, Response
 from mitmproxy.net.http import url
-
-import functools
-import logging
-import re
+from parse import Parser
 
 __author__ = "ttimasdf"
 __copyright__ = "ttimasdf"
