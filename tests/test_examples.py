@@ -1,12 +1,51 @@
+import importlib.machinery
+import importlib.util
+import os
 import re
+import sys
+
 import pytest
 from mitmproxy.http import Response
 from mitmproxy.test import taddons, tflow
 
-
 __author__ = "ttimasdf"
 __copyright__ = "ttimasdf"
 __license__ = "Apache-2.0"
+
+
+@pytest.mark.parametrize(
+    "script_path",
+    [
+        "examples/httpbin/httpbin.py",
+        "examples/krisp/krisp.py",
+        "examples/polyv_scrapper/polyv.py",
+    ],
+)
+def test_scripts_import(script_path):
+    """
+    Modified mirmproxy.addons.script.load_script, without catching exceptions.
+    Use this test to check whether an example script is importable.
+    Original version will silently catch every exception,
+    not suitable for unit testing.
+    """
+
+    fullname = "__mitmproxy_script__.{}".format(
+        os.path.splitext(os.path.basename(script_path))[0]
+    )
+    # the fullname is not unique among scripts, so if there already is an existing script with said
+    # fullname, remove it.
+    sys.modules.pop(fullname, None)
+    sys.path.insert(0, os.path.dirname(script_path))
+    m = None
+    loader = importlib.machinery.SourceFileLoader(fullname, script_path)
+    spec = importlib.util.spec_from_loader(fullname, loader=loader)
+    assert spec
+    m = importlib.util.module_from_spec(spec)
+    loader.exec_module(m)
+    if not getattr(m, "name", None):
+        m.name = script_path
+
+    assert len(m.addons) > 0
 
 
 class TestScripts:
@@ -89,8 +128,8 @@ class TestScripts:
             )
 
             def monkey_decrypt(*args):
-                import json
                 import base64
+                import json
 
                 payload = {polyv.REDACTED_CONSTANT: "whosyourdaddy"}
                 return base64.b64encode(json.dumps(payload).encode())
