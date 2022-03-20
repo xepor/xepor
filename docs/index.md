@@ -7,11 +7,11 @@
 
 ```{toctree}
 Overview & Quick Start <readme>
-License <license>
-Authors <authors>
+API Doc <api/modules>
 changelog
+Authors <authors>
+License <license>
 contributing
-Module Reference <api/modules>
 ```
 
 
