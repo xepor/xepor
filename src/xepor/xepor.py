@@ -210,7 +210,7 @@ class InterceptedAPI:
         self: str,
         path: str,
         host: Optional[str] = None,
-        reqtype: RouteType = RouteType.REQUEST,
+        rtype: RouteType = RouteType.REQUEST,
         catch_error: bool = True,
         return_error: bool = False,
     ):
@@ -226,7 +226,7 @@ class InterceptedAPI:
             def change_your_request(flow: HTTPFlow):
                 flow.request.query["payload"] = "evil_param"
 
-            @api.route("/basic-auth/{usr}/{pwd}", reqtype=RouteType.RESPONSE)
+            @api.route("/basic-auth/{usr}/{pwd}", rtype=RouteType.RESPONSE)
             def capture_auth(flow: HTTPFlow, usr=None, pwd=None):
                 print(
                     f"auth @ {usr} + {pwd}:",
@@ -252,7 +252,7 @@ class InterceptedAPI:
                 In HTTP or Socks5h proxy mode, it may hopefully be a hostname,
                 otherwise, it'll be an IP address.
 
-        :param reqtype: Set the route be matched on either request or response.
+        :param rtype: Set the route be matched on either request or response.
             Accepting :class:`RouteType`.
 
         :param catch_error: If set to `True`, the exception inside the route
@@ -304,12 +304,12 @@ class InterceptedAPI:
         def wrapper(handler):
             if catch_error:
                 handler = catcher(handler)
-            if reqtype == RouteType.REQUEST:
+            if rtype == RouteType.REQUEST:
                 self.request_routes.append((host, Parser(path), handler))
-            elif reqtype == RouteType.RESPONSE:
+            elif rtype == RouteType.RESPONSE:
                 self.response_routes.append((host, Parser(path), handler))
             else:
-                raise ValueError(f"Invalid route type: {reqtype}")
+                raise ValueError(f"Invalid route type: {rtype}")
             return handler
 
         return wrapper
@@ -405,7 +405,7 @@ class InterceptedAPI:
         """
         return Response.make(502, msg)
 
-    def find_handler(self, host, path, reqtype=RouteType.REQUEST):
+    def find_handler(self, host, path, rtype=RouteType.REQUEST):
         """
         Finds the appropriate handler for the request.
 
@@ -416,15 +416,15 @@ class InterceptedAPI:
 
         :param host: The host of the request.
         :param path: The path of the request.
-        :param reqtype: The type of the request. Accepting :class:`RouteType`.
+        :param rtype: The type of the route. Accepting :class:`RouteType`.
         :return: The handler and the parse result.
         """
-        if reqtype == RouteType.REQUEST:
+        if rtype == RouteType.REQUEST:
             routes = self.request_routes
-        elif reqtype == RouteType.RESPONSE:
+        elif rtype == RouteType.RESPONSE:
             routes = self.response_routes
         else:
-            raise ValueError(f"Invalid route type: {reqtype}")
+            raise ValueError(f"Invalid route type: {rtype}")
 
         for h, parser, handler in routes:
             if h != host:
