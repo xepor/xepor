@@ -36,11 +36,17 @@ SSL stripping is NOT provided by this project.
 
 # Quick start
 
+Take the script from [examples/httpbin](https://github.com/xepor/xepor-examples/tree/main/httpbin/) as an example.
+
 ```bash
 mitmweb --web-host=\* --set connection_strategy=lazy -s example/httpbin/httpbin.py
 ```
 
-Set your Browser HTTP Proxy to `<ip>:8080`, and access web interface at `<ip>:8081`, e.g. http://127.0.0.1:8081/
+In this example, we setup the mitmproxy server on `127.0.0.1`. You could change it to any IP on your machine or alternatively to the IP of your VPS. The mitmproxy server running in reverse, upstream and transparent mode requires `--set connection_strategy=lazy` option to be set so that Xepor could function correctly. I recommand this option always be on for best stability.
+
+Set your Browser HTTP Proxy to `http://127.0.0.1:8080`, and access web interface at http://127.0.0.1:8081/.
+
+Send a GET request from http://httpbin.org/#/HTTP_Methods/get_get , Then you could see the modification made by Xepor in mitmweb interface, browser devtools or Wireshark.
 
 The `httpbin.py` do two things.
 
@@ -50,8 +56,9 @@ The `httpbin.py` do two things.
 Just what mitmproxy always do, but with code written in [*xepor*](https://github.com/xepor/xepor) way.
 
 ```python
+# https://github.com/xepor/xepor-examples/tree/main/httpbin/httpbin.py
 from mitmproxy.http import HTTPFlow
-from xepor import InterceptedAPI
+from xepor import InterceptedAPI, RouteType
 
 
 HOST_HTTPBIN = "httpbin.org"
@@ -69,7 +76,7 @@ def change_your_request(flow: HTTPFlow):
     flow.request.query["payload"] = "evil_param"
 
 
-@api.route("/basic-auth/{usr}/{pwd}", reqtype=InterceptedAPI.RESPONSE)
+@api.route("/basic-auth/{usr}/{pwd}", reqtype=RouteType.RESPONSE)
 def capture_auth(flow: HTTPFlow, usr=None, pwd=None):
     """
     Sniffing password.
@@ -84,6 +91,5 @@ def capture_auth(flow: HTTPFlow, usr=None, pwd=None):
 
 
 addons = [api]
-
 ```
 
