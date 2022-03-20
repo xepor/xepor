@@ -34,6 +34,12 @@ If you want to step from PoC to production, from demo(e.g. [http-reply-from-prox
 
 SSL stripping is NOT provided by this project.
 
+# Installation
+
+```bash
+pip install xepor
+```
+
 # Quick start
 
 Take the script from [examples/httpbin](https://github.com/xepor/xepor-examples/tree/main/httpbin/) as an example.
