@@ -1,4 +1,4 @@
-[![Python package](https://github.com/xepor/xepor/actions/workflows/python-package.yml/badge.svg)](https://github.com/xepor/xepor/actions/workflows/python-package.yml)
+[![Unit Tests](https://github.com/xepor/xepor/actions/workflows/test.yml/badge.svg)](https://github.com/xepor/xepor/actions/workflows/test.yml)
 [![PyPI-Server](https://img.shields.io/pypi/v/xepor.svg)](https://pypi.org/project/xepor/)
 ![PyPI - Status](https://img.shields.io/pypi/status/xepor)
 [![Documentation Status](https://readthedocs.org/projects/xepor/badge/?version=latest)](https://xepor.readthedocs.io/en/latest/?badge=latest)
