@@ -13,12 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      # matrix:
-      #   python-version: ["3.8", "3.9", "3.10", "3.11"]
       matrix:
         include:
-          - python: '3.7'
-            tox_env: py37-mitmproxy7,py37-mitmproxy8
           - python: '3.8'
             tox_env: py38-mitmproxy7,py38-mitmproxy8
           - python: '3.9'
