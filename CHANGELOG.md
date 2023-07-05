@@ -1,6 +1,11 @@
 # Changelog
 
 % **Note**: This document contains some [MyST](https://myst-parser.readthedocs.io/en/latest/index.html) syntax which is not completely Markdown. For better experience (and cross references to the changed code) you could read this document on [Read the Docs](https://xepor.readthedocs.io/en/latest/changelog.html)
+## Version 0.6.0
+
+- Feature: Automatically set `--set connection_strategy=lazy` when Xepor scripts are loaded. No need to manually set the options any more 🥳
+- Feature: Add {func}`xepor.InterceptedAPI.load` API for configuration before start. Check the documentation for usage details.
+
 ## Version 0.5.1
 
 - Feature: Add compatibility with mitmproxy 9.x and Python 3.11~3.12.
