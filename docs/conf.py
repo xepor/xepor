@@ -8,6 +8,7 @@
 # serve to show the default.
 
 import os
+import re
 import sys
 
 # -- Path setup --------------------------------------------------------------
@@ -256,5 +257,14 @@ intersphinx_mapping = {
     "setuptools": ("https://setuptools.pypa.io/en/stable/", None),
     "pyscaffold": ("https://pyscaffold.org/en/stable", None),
 }
+
+# -- linkcheck event listener ------------------------------------------------
+def strip_github_anchor(app, url):
+    if url and (match := re.match(r"(https:\/\/github\.com\/[\w\d._-]+\/[\w\d._-]+\/blob\/.*?)#L\d+(?:-L\d+)?", url)) != None:
+        url = match.group(1)
+    return url
+
+def setup(app):
+    app.connect('linkcheck-process-uri', strip_github_anchor)
 
 print(f"loading configurations for {project} {version} ...", file=sys.stderr)
