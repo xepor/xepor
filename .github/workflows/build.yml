@@ -15,7 +15,12 @@ jobs:
     name: Build sdist and (pure Python) wheel
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - if: github.event.ref_type == 'tag'
+        uses: actions/checkout@v3
+      - if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v4
         name: Install Python
         with:
