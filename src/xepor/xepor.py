@@ -8,6 +8,8 @@ import urllib.parse
 from enum import Enum
 from typing import List, Optional, Tuple, Union
 
+from mitmproxy import ctx
+from mitmproxy.addonmanager import Loader
 from mitmproxy.connection import Server
 from mitmproxy.http import HTTPFlow, Response
 from mitmproxy.net.http import url
@@ -128,6 +130,28 @@ class InterceptedAPI:
         if os.getenv("XEPOR_LOG_DEBUG"):
             self._log.setLevel(logging.DEBUG)
         self._log.info("%s started", self.__class__.__name__)
+
+    def load(self, loader: Loader):
+        """
+        This function is called by the mitmproxy framework *before* proxy server started.
+        Currently it's used to set a must-have mitmproxy option for Xepor
+        to work: ``connection_strategy=lazy``. If you want to override this method,
+        remember to call ``super().load(loader)`` in your code.
+
+        User can also import and use :py:data:`mitmproxy.ctx` object to configure
+        other options for mitmproxy when overriding this function.
+
+        .. code-block:: python
+
+            from mitmproxy import ctx
+
+            ctx.options.connection_strategy = "lazy"
+
+        :param loader: a :py:class:`mitmproxy.addonmanager.Loader` which can be used to add custom options.
+        :return: None
+        """
+        self._log.info("Setting option connection_strategy=lazy")
+        ctx.options.connection_strategy = "lazy"
 
     # def server_connect(self, data: ServerConnectionHookData):
     #     self._log.debug("Getting connection: peer=%s sock=%s addr=%s . state=%s",
