@@ -22,12 +22,13 @@ jobs:
           python-version: ${{ env.python-version }}
       - name: Install tox
         run: |
-          pip install tox
+          python -m pip install --upgrade tox
       - name: Build packages
         run: |
-          tox -e build
+          python -m tox -e build
       - uses: actions/upload-artifact@v3
         with:
+          name: xepor-dists
           path: ./dist/xepor-*
 
   upload_github:
@@ -38,7 +39,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: artifact
+          name: xepor-dists
           path: dist
       - uses: softprops/action-gh-release@v1
         with:
@@ -50,15 +51,18 @@ jobs:
     needs: [build]
     runs-on: ubuntu-22.04
     if: github.repository == 'xepor/xepor' && github.event_name == 'workflow_dispatch'
+    environment:
+      name: staging
+      url: https://test.pypi.org/p/xepor
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: artifact
+          name: xepor-dists
           path: dist
-      - uses: pypa/gh-action-pypi-publish@v1.5.0
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
           skip_existing: true
 
@@ -67,12 +71,14 @@ jobs:
     needs: [build]
     runs-on: ubuntu-22.04
     if: github.repository == 'xepor/xepor' && github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    environment:
+      name: release
+      url: https://pypi.org/p/xepor
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: artifact
+          name: xepor-dists
           path: dist
-      - uses: pypa/gh-action-pypi-publish@v1.5.0
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+      - uses: pypa/gh-action-pypi-publish@release/v1
