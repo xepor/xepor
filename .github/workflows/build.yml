@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout current commit
-        if: github.event.ref_type == 'tag'
+        if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
         uses: actions/checkout@v3
       - name: Checkout full source code tree
         if: github.event_name == 'workflow_dispatch'
@@ -62,7 +62,7 @@ jobs:
     name: Upload to PyPI (test)
     needs: [build]
     runs-on: ubuntu-22.04
-    if: github.repository == 'xepor/xepor' && github.event_name == 'workflow_dispatch'
+    if: github.repository == 'xepor/xepor'
     environment:
       name: staging
       url: https://test.pypi.org/p/xepor
