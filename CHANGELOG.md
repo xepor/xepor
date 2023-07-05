@@ -1,6 +1,10 @@
 # Changelog
 
 % **Note**: This document contains some [MyST](https://myst-parser.readthedocs.io/en/latest/index.html) syntax which is not completely Markdown. For better experience (and cross references to the changed code) you could read this document on [Read the Docs](https://xepor.readthedocs.io/en/latest/changelog.html)
+## Version 0.5.1
+
+- Feature: Add compatibility with mitmproxy 9.x and Python 3.11~3.12.
+  - Since mitmproxy 8.x is not compatible with Python 3.11, therefore updating to mitmproxy 9.x + xepor 0.5.1 is recommended especially for Kali users with rolling updates.
 
 ## Version 0.5.0
 
