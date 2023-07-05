@@ -1,0 +1,78 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    # Allow this workflow to be run manually (pushing to testpypi instead of pypi)
+
+env:
+  python-version: '3.11'
+
+jobs:
+  build:
+    name: Build sdist and (pure Python) wheel
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        name: Install Python
+        with:
+          python-version: ${{ env.python-version }}
+      - name: Install tox
+        run: |
+          pip install tox
+      - name: Build packages
+        run: |
+          tox -e build
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./dist/xepor-*
+
+  upload_github:
+    name: Upload to Github Release
+    needs: [build]
+    runs-on: ubuntu-22.04
+    if: github.repository == 'xepor/xepor' && github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: dist/xepor-*
+          generate_release_notes: true
+
+  upload_pypi_test:
+    name: Upload to PyPI (test)
+    needs: [build]
+    runs-on: ubuntu-22.04
+    if: github.repository == 'xepor/xepor' && github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@v1.5.0
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+          skip_existing: true
+
+  upload_pypi:
+    name: Upload to PyPI (prod)
+    needs: [build]
+    runs-on: ubuntu-22.04
+    if: github.repository == 'xepor/xepor' && github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@v1.5.0
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
