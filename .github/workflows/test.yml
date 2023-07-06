@@ -29,7 +29,7 @@ jobs:
             tox_env: docs,doctests,linkcheck
 
     steps:
-    - uses: actions/checkout@v3.0.0
+    - uses: actions/checkout@v3
       with:
         submodules: true
     - name: Set up Python ${{ matrix.python }}
