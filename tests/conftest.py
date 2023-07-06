@@ -13,6 +13,7 @@
 import os
 import socket
 
+from mitmproxy.options import Options
 from mitmproxy.utils import data
 
 import pytest
@@ -47,3 +48,25 @@ skip_no_ipv6 = pytest.mark.skipif(
 @pytest.fixture()
 def tdata():
     return data.Data(__name__)
+
+@pytest.fixture()
+def toptions():
+    options = Options()
+    # options duplicated here to simplify testing setup
+    options.add_option(
+        "connection_strategy",
+        str,
+        "lazy",
+        "Determine when server connections should be established.",
+        choices=("eager", "lazy"),
+    )
+    options.add_option(
+        "keep_host_header",
+        bool,
+        False,
+        """
+        Reverse Proxy: Keep the original host header instead of rewriting it
+        to the reverse proxy target.
+        """,
+    )
+    return options

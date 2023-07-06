@@ -49,8 +49,8 @@ def test_scripts_import(script_path):
 
 
 class TestScripts:
-    def test_httpbin(self, tdata):
-        with taddons.context() as tctx:
+    def test_httpbin(self, tdata, toptions):
+        with taddons.context(options=toptions) as tctx:
             s = tctx.script(tdata.path("../examples/httpbin/httpbin.py"))
             api = s.addons[0]
 
@@ -61,8 +61,8 @@ class TestScripts:
             api.request(flow)
             assert flow.request.query["payload"] == "evil_param"
 
-    def test_krisp_forward(self, tdata):
-        with taddons.context() as tctx:
+    def test_krisp_forward(self, tdata, toptions):
+        with taddons.context(options=toptions) as tctx:
             s = tctx.script(tdata.path("../examples/krisp/krisp.py"))
             api = s.addons[0]
 
@@ -75,8 +75,8 @@ class TestScripts:
                 r"\d+\.\d+\.\d+\.\d+", flow.request.headers["X-Forwarded-For"]
             )
 
-    def test_krisp_analytics(self, tdata):
-        with taddons.context() as tctx:
+    def test_krisp_analytics(self, tdata, toptions):
+        with taddons.context(options=toptions) as tctx:
             s = tctx.script(tdata.path("../examples/krisp/krisp.py"))
             api = s.addons[0]
 
@@ -113,8 +113,8 @@ class TestScripts:
             ),
         ],
     )
-    def test_polyv(self, capsys, monkeypatch, tdata, url, resp, stdout):
-        with taddons.context() as tctx:
+    def test_polyv(self, capsys, monkeypatch, tdata, toptions, url, resp, stdout):
+        with taddons.context(options=toptions) as tctx:
             polyv = tctx.script(tdata.path("../examples/polyv_scrapper/polyv.py"))
             api = polyv.addons[0]
 

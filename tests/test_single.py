@@ -34,8 +34,8 @@ def api_simple():
         ("http://hls.videocc.net/jkag324wd2/e/cwqzcxkvj0iukomqxu0l591u2dke4vkc_1.m3u8", "TEST 2 INTERCEPTED"),
     ],
 )
-def test_intercepted_route(api_simple, req_url, resp_body):
-    with taddons.context(api_simple) as tctx:
+def test_intercepted_route(toptions, api_simple, req_url, resp_body):
+    with taddons.context(api_simple, options=toptions) as tctx:
         flow = tflow.tflow()
         flow.request.url = req_url
         assert flow.response is None
@@ -44,8 +44,8 @@ def test_intercepted_route(api_simple, req_url, resp_body):
         assert resp_body in flow.response.text
 
 
-def test_non_intercepted_route(api_simple):
-    with taddons.context(api_simple) as tctx:
+def test_non_intercepted_route(toptions, api_simple):
+    with taddons.context(api_simple, options=toptions) as tctx:
         flow = tflow.tflow()
         flow.request.path = "/test2"
         assert flow.response is None
