@@ -24,9 +24,9 @@ jobs:
             tox_env: py310-mitmproxy7,py310-mitmproxy8,py310-mitmproxy9
           - python: '3.11'
             tox_env: py311-mitmproxy7,py311-mitmproxy8,py311-mitmproxy9
-          - python: '3.12.0-beta.3 - 3.12'
+          - python: '3.12'
             tox_env: py312-mitmproxy7,py312-mitmproxy8,py312-mitmproxy9
-          - python: '3.11'
+          - python: '3.12'
             tox_env: docs,doctests,linkcheck
 
     steps:

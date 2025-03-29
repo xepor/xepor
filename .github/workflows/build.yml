@@ -8,7 +8,7 @@ on:
     # Allow this workflow to be run manually (pushing to testpypi instead of pypi)
 
 env:
-  python-version: '3.11'
+  python-version: '3.12'
 
 jobs:
   build:
