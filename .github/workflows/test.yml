@@ -20,6 +20,7 @@ jobs:
       uses: astral-sh/setup-uv@v5
       with:
         python-version: 3.12
+        enable-cache: true
     - name: Run test suite
       run: |
         uvx --with tox-uv tox
