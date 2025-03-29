@@ -12,34 +12,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - python: '3.8'
-            tox_env: py38-mitmproxy7,py38-mitmproxy8
-          - python: '3.9'
-            tox_env: py39-mitmproxy7,py39-mitmproxy8,py39-mitmproxy9
-          - python: '3.10'
-            tox_env: py310-mitmproxy7,py310-mitmproxy8,py310-mitmproxy9
-          - python: '3.11'
-            tox_env: py311-mitmproxy7,py311-mitmproxy8,py311-mitmproxy9
-          - python: '3.12'
-            tox_env: py312-mitmproxy7,py312-mitmproxy8,py312-mitmproxy9
-          - python: '3.12'
-            tox_env: docs,doctests,linkcheck
-
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: true
-    - name: Set up Python ${{ matrix.python }}
-      uses: actions/setup-python@v4
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@v5
       with:
-        python-version: ${{ matrix.python }}
-    - name: Install tox
-      run: |
-        python -m pip install --upgrade tox
+        python-version: 3.12
     - name: Run test suite
       run: |
-        python -m tox run -e ${{ matrix.tox_env }}
+        uvx --with tox-uv tox
